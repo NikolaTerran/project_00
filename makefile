@@ -31,8 +31,8 @@ list_free.o: list_free.c listlib.h
 array_add.o: array_add.c listlib.h arraylib.h
   gcc -c array_add.c
   
-array_search.o: array_search_song.c listlib.h arraylib.h
-  gcc -c array_search_song.c
+array_search.o: array_search.c listlib.h arraylib.h
+  gcc -c array_search.c
 
 array_search_artist.o: array_search_artist.c listlib.h arraylib.h
   gcc -c array_search_artist.c
