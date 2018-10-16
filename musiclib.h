@@ -1,0 +1,10 @@
+void lib_print(struct song_node *table);
+struct song_node * lib_add(struct song_node *table, char[100] name, char[100] artist);
+struct song_node * lib_insert_front(struct song_node *list, char[100] name, char[100] artist);
+struct song_node * lib_print_artist(struct song_node *table, char[100] artist);
+struct song_node * lib_free(struct song_node *table);
+struct song_node * lib_insert_order(struct song_node *list, char[100] name, char[100] artist);
+struct song_node * lib_first_song(struct song_node *list, char[100] artist);
+struct song_node * lib_remove(struct song_node *list, char[100] name, char[100] artist);
+struct song_node * lib_random(struct song_node *list);
+struct song_node * lib_search(struct song_node *list, char[100] song, char[100] artist);
