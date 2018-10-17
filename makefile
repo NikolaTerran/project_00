@@ -1,15 +1,17 @@
-all: main.o listlib.h arraylib.h listlib.o musiclib.o
-  gcc main.o listlib.o musiclib.o
+all: main.o listlib.h musiclib.h listlib.o musiclib.o
+	gcc main.o listlib.o musiclib.o
   
-main.o: listlib.h arraylib.h main.c
-  gcc -c main.c
+main.o: listlib.h musiclib.h main.c
+	gcc -c main.c
 
 listlib.o: listlib.h listlib.c
-  gcc -c listlib.c
+	gcc -c listlib.c
 
 musiclib.o: musiclib.h musiclib.c
-  gcc -c musiclib.c
+	gcc -c musiclib.c
 
-run: ./a.out
+run: 
+	./a.out
 
-clean: rm *.o
+clean: 
+	rm *.o
