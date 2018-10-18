@@ -2,29 +2,32 @@
 #include <stdio.h>
 #include "listlib.h"
 #include <string.h>
+#include <time.h>
 
 void list_print(struct song_node *list){
 	if(!list){
 		printf("This list is empty\n\n");	
 	}
 	else if(list->next){
-		printf("%s\n",list->name);
-		printf("%s\n",list->artist);
+		printf("name: %s -- artist: %s||",list->name,list->artist);
 		//printf("%d\n",list->next); //print next node's address
-		print_list(list->next);
+		list_print(list->next);
 	}
 	else{	//else is included because the stack value is still on the stack
-		printf("%s\n",list->name);
-		printf("%s\n",list->artist);
+		printf("name: %s -- artist: %s\n",list->name,list->artist);
 	}
 }
 
-struct song_node * list_insert_front(struct song_node *list, char* name, char* artist){
+//expecting user not to mess up the order
+struct song_node * list_insert_front(struct song_node *list, char name[100], char artist[100]){
 	struct song_node *x;	
-	struct song_node new_node = {name;artist;list};
-	x = malloc(sizeof(song_node));
-	x->artist = new_node.artist;
-	x->name = new_node.name;
+	struct song_node new_node;
+	strcpy(new_node.name,name);
+	strcpy(new_node.artist,artist);
+	new_node.next = list;
+	x = malloc(sizeof(struct song_node));
+	strcpy(x->artist,new_node.artist);
+	strcpy(x->name,new_node.name);
 	x->next = new_node.next;
 	//x = list; 			//will not work
 	//printf("%d\n",x->next->next);
@@ -33,7 +36,7 @@ struct song_node * list_insert_front(struct song_node *list, char* name, char* a
 
 struct song_node * list_free(struct song_node *list){
 	if(list->next){
-		free_list(list->next);
+		list_free(list->next);
 		free(list);
 	}
 	else{
@@ -43,30 +46,64 @@ struct song_node * list_free(struct song_node *list){
 }
 
 struct song_node * list_insert_order(struct song_node *list, char* name, char* artist){
-	struct song_node *x = list;	
-	while(list){
-		if(strcmp(artist,list->artist) <= 0){
-			if(strcmp(name,list->name) <= 0){
+	struct song_node *x = list;
+	if(strcmp(artist,list->artist) < 0){
+		x = list_insert_front(list,name,artist); 
+	}
+	else if(strcmp(artist,list->artist) == 0){
+		if(strcmp(name,list->name)<=0){
+			x = list_insert_front(list,name,artist);		
+		}
+	}	
+	else{	
+		do{
+			if(!list->next){
+				insert_helper(list,name,artist);
+				break;
+			}			
+			else if(strcmp(artist,list->next->artist) < 0){
+				insert_helper(list,name,artist);
 				break;
 			}
-			list = list->next;
-		}
-		else{
-			list = list->next;
-		}	
+			else if(strcmp(artist,list->next->artist) == 0){
+				if(strcmp(name,list->next->name) <= 0){
+					insert_helper(list,name,artist);
+					break;
+				}
+				list = list->next;
+			}
+			else if(!list->next){
+				insert_helper(list,name,artist);
+				break;
+			}
+			else{
+				list = list->next;
+			}	
+		}while(list);
 	}
-	struct song_node new_node = {name;artist;list};
-
-	//////////////Edit from Here
-	x = malloc(sizeof(song_node));
-	x->artist = new_node.artist;
-	x->name = new_node.name;
-	x->next = new_node.next;
 	return x;
 }
 
+void insert_helper(struct song_node *list,char* name, char* artist){
+	struct song_node * new_node;
+	new_node = malloc(sizeof(struct song_node));	
+	strcpy(new_node->name,name);
+	strcpy(new_node->artist,artist);			
+	new_node->next = list->next;
+	list->next = new_node;
+}
+
 struct song_node * list_first_song(struct song_node *list, char* artist){
-  return 0;
+	while(list){	
+		if(strcmp(artist,list->artist)==0){
+			break;						
+		}
+		list = list->next;
+	}
+	if(!list){
+		return NULL;
+	}
+	return list;
 }
 
 struct song_node * list_remove(struct song_node *list, char* name, char* artist){
@@ -74,9 +111,46 @@ struct song_node * list_remove(struct song_node *list, char* name, char* artist)
 }
 
 struct song_node * list_random(struct song_node *list){
-  return 0;
+	int i = list_length(list);
+	srand(time(NULL));
+	i = rand()%i;
+	while(i){
+		list = list->next;
+		i --;
+	}
+	return list;
 }
 
-struct song_node * list_search(struct song_node *list, char* song, char* artist){
-  return 0;
+int list_length(struct song_node *list){
+	int i = 0;
+	while(list){
+		i++;
+		list = list->next;
+	}
+	return i;
 }
+
+struct song_node * list_search(struct song_node *list, char* name, char* artist){	
+	list = list_first_song(list,artist);	
+	while(list){	
+		if(strcmp(name,list->name)==0){
+			break;					
+		}
+		list = list->next;
+	}
+	if(!list){
+		return NULL;
+	}
+	return list;
+}
+
+void list_print_node(struct song_node *list){
+	if(!list){
+		printf("The song/artist does not exist in this list\n");
+	}
+	else{
+		printf("name: %s -- artist: %s\n",list->name,list->artist);
+	}
+}
+
+
