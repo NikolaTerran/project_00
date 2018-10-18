@@ -84,6 +84,7 @@ struct song_node * list_insert_order(struct song_node *list, char* name, char* a
 	return x;
 }
 
+//it's a helper, it dosen't do anything by itself, so I'm not gonna test it in main
 void insert_helper(struct song_node *list,char* name, char* artist){
 	struct song_node * new_node;
 	new_node = malloc(sizeof(struct song_node));	
@@ -106,13 +107,33 @@ struct song_node * list_first_song(struct song_node *list, char* artist){
 	return list;
 }
 
-struct song_node * list_remove(struct song_node *list, char* name, char* artist){
-  return 0;
+struct song_node * list_remove(struct song_node *list, char* name, char* artist){	
+	struct song_node *head = list;	
+	struct song_node *x = list_search(list,name,artist);
+	while(list){
+		if(list == x){
+			head = x->next;
+			free(x);
+			break;			
+		}
+		else if(!list->next){
+			break;		
+		}
+		else if(list->next == x){
+			list->next = x->next;
+			free(x);
+			break;	
+		}
+		else{
+			list = list->next;
+		}
+	}
+	return head;
 }
 
-struct song_node * list_random(struct song_node *list){
+struct song_node * list_random(struct song_node *list,int seed){
 	int i = list_length(list);
-	srand(time(NULL));
+	srand(seed);
 	i = rand()%i;
 	while(i){
 		list = list->next;
