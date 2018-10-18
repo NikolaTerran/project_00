@@ -4,10 +4,8 @@ struct song_node {char name[100]; char artist[100]; struct song_node *next;};
 struct song_node * table[27];
 #endif
 
-void insert_helper(struct song_node *list,char* name, char* artist);
+
 void list_print(struct song_node *list);
-void list_print_node(struct song_node *list);
-int list_length(struct song_node *list);
 struct song_node * list_insert_front(struct song_node *list, char* name, char* artist);
 struct song_node * list_free(struct song_node *list);
 struct song_node * list_insert_order(struct song_node *list, char* name, char* artist);
@@ -15,4 +13,7 @@ struct song_node * list_first_song(struct song_node *list, char* artist);
 struct song_node * list_remove(struct song_node *list, char* name, char* artist);
 struct song_node * list_random(struct song_node *list,int seed);
 struct song_node * list_search(struct song_node *list, char* song, char* artist);
-//#endif
+//not going to demo the functions below
+void list_print_node(struct song_node *list);
+int list_length(struct song_node *list);
+void insert_helper(struct song_node *list,char* name, char* artist);
