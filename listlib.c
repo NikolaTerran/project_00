@@ -6,7 +6,7 @@
 
 void list_print(struct song_node *list){
 	if(!list){
-		printf("This list is empty\n\n");	
+		printf("NULL\n");	
 	}
 	else if(list->next){
 		printf("name: %s -- artist: %s||",list->name,list->artist);
@@ -35,7 +35,9 @@ struct song_node * list_insert_front(struct song_node *list, char name[100], cha
 }
 
 struct song_node * list_free(struct song_node *list){
-	if(list->next){
+	if(!list){
+	}
+	else if(list->next){
 		list_free(list->next);
 		free(list);
 	}
@@ -47,7 +49,10 @@ struct song_node * list_free(struct song_node *list){
 
 struct song_node * list_insert_order(struct song_node *list, char* name, char* artist){
 	struct song_node *x = list;
-	if(strcmp(artist,list->artist) < 0){
+	if(!list){
+		x = list_insert_front(list,name,artist);	
+	}
+	else if(strcmp(artist,list->artist) < 0){
 		x = list_insert_front(list,name,artist); 
 	}
 	else if(strcmp(artist,list->artist) == 0){
@@ -114,6 +119,7 @@ struct song_node * list_remove(struct song_node *list, char* name, char* artist)
 		if(list == x){
 			head = x->next;
 			free(x);
+			x = NULL;
 			break;			
 		}
 		else if(!list->next){
@@ -122,6 +128,7 @@ struct song_node * list_remove(struct song_node *list, char* name, char* artist)
 		else if(list->next == x){
 			list->next = x->next;
 			free(x);
+			x = NULL;
 			break;	
 		}
 		else{
